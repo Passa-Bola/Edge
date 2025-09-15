@@ -1,0 +1,12 @@
+Este é um arquivo placeholder para a pasta assets.
+
+Esta pasta foi criada para armazenar imagens e outros recursos do projeto.
+
+Você pode adicionar aqui:
+- Imagens (PNG, JPG, SVG, etc.)
+- Diagramas de arquitetura
+- Ícones
+- Outros recursos visuais
+
+Arquivo referenciado no README.md:
+- iot_architecture_diagram.png (ainda não adicionado)
