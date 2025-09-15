@@ -2,7 +2,11 @@
 
 ## Integrantes do Grupo
 
-*   Lucas Toledo Cortonezi
+*   Lucas Toledo Cortonezi - 563271
+*   Yan Barutti - 566412
+*   Guilherme Araujo - 561848
+*   Samuel Monteiro - 564391
+*   Leonardo Silva - 564929
 
 ## Descrição Clara do Projeto
 
