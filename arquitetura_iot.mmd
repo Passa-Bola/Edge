@@ -1,0 +1,35 @@
+graph TD
+    subgraph Chuteira Inteligente
+        A[Sensor de Pressão/Força] --> B(ESP32 com Acelerômetro)
+        B --> C{Módulo Bluetooth Low Energy}
+    end
+
+    subgraph Comunicação
+        C --> D[Gateway Local / Smartphone]
+        D --> E[Protocolo MQTT/HTTP]
+    end
+
+    subgraph Plataforma de Gerenciamento IoT
+        E --> F[Node-RED Instance]
+        F --> G[Nó de Ingestão de Dados]
+        G --> H[Nó de Processamento de Dados - Contagem de Toques/Passes, Usage Rate]
+        H --> I[Nó de Armazenamento de Dados - Ex: Banco de Dados Local/JSON]
+        I --> J[Nó de Visualização/Dashboard - Node-RED Dashboard]
+    end
+
+    subgraph Aplicação/Visualização
+        J --> K[Usuário Final - Visualização de Estatísticas]
+    end
+
+    style A fill:#f9f,stroke:#333,stroke-width:2px
+    style B fill:#bbf,stroke:#333,stroke-width:2px
+    style C fill:#ccf,stroke:#333,stroke-width:2px
+    style D fill:#fcf,stroke:#333,stroke-width:2px
+    style E fill:#afa,stroke:#333,stroke-width:2px
+    style F fill:#f9f,stroke:#333,stroke-width:2px
+    style G fill:#bbf,stroke:#333,stroke-width:2px
+    style H fill:#ccf,stroke:#333,stroke-width:2px
+    style I fill:#fcf,stroke:#333,stroke-width:2px
+    style J fill:#afa,stroke:#333,stroke-width:2px
+    style K fill:#f9f,stroke:#333,stroke-width:2px
+
