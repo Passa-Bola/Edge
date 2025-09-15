@@ -8,7 +8,7 @@
 *   Samuel Monteiro - 564391
 *   Leonardo Silva - 564929
 
-## Descrição Clara do Projeto:
+## Descrição do Projeto:
 
 Este projeto visa desenvolver a arquitetura inicial de uma aplicação IoT para o "Passa a Bola", focando na criação de uma chuteira inteligente. O objetivo é coletar e transmitir dados de desempenho de jogadoras em tempo real, como número de toques na bola, passes e outras métricas básicas de participação. Esta primeira versão estabelece as bases para um sistema de estatísticas avançadas, permitindo futuras expansões e análises mais complexas.
 
