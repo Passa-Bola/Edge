@@ -456,5 +456,5 @@ Para contribuir com o projeto:
 ---
 
 **Projeto desenvolvido para o Challenge "Passa a Bola" - Sprint 3**  
-**Equipe**: Leonardo Silva, Samuel Monteiro, Yan Barutti, Guilherme Araujo, Lucas Cortonezi
+**Equipe**: Leonardo Silva, Samuel Monteiro, Yan Barutti, Guilherme Araujo, Lucas Toledo
 
