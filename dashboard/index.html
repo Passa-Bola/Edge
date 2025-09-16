@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Chuteira Inteligente</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #7f8c8d;
+            font-size: 1.1em;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: #fff;
+            border-radius: 10px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            border-left: 4px solid #3498db;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-card.touches {
+            border-left-color: #e74c3c;
+        }
+
+        .stat-card.passes {
+            border-left-color: #2ecc71;
+        }
+
+        .stat-card.possession {
+            border-left-color: #f39c12;
+        }
+
+        .stat-card.pressure {
+            border-left-color: #9b59b6;
+        }
+
+        .stat-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            color: #7f8c8d;
+            font-size: 1.1em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .chart-container {
+            background: #fff;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+        }
+
+        .chart-title {
+            font-size: 1.3em;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 10px;
+            animation: pulse 2s infinite;
+        }
+
+        .status-dot.online {
+            background-color: #2ecc71;
+        }
+
+        .status-dot.offline {
+            background-color: #e74c3c;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .data-log {
+            background: #2c3e50;
+            color: #ecf0f1;
+            border-radius: 10px;
+            padding: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .log-entry {
+            margin-bottom: 5px;
+            padding: 5px;
+            border-left: 3px solid #3498db;
+            padding-left: 10px;
+        }
+
+        .timestamp {
+            color: #95a5a6;
+            margin-right: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🦶 Chuteira Inteligente</h1>
+            <p>Dashboard em Tempo Real - Projeto Passa a Bola</p>
+            <div class="status-indicator">
+                <div class="status-dot online" id="statusDot"></div>
+                <span id="statusText">Conectado ao Simulador</span>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card touches">
+                <div class="stat-value" id="totalTouches">0</div>
+                <div class="stat-label">Toques na Bola</div>
+            </div>
+            <div class="stat-card passes">
+                <div class="stat-value" id="totalPasses">0</div>
+                <div class="stat-label">Passes</div>
+            </div>
+            <div class="stat-card possession">
+                <div class="stat-value" id="possessionTime">0.0s</div>
+                <div class="stat-label">Tempo de Posse</div>
+            </div>
+            <div class="stat-card pressure">
+                <div class="stat-value" id="currentPressure">0</div>
+                <div class="stat-label">Pressão Atual</div>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <div class="chart-title">📊 Log de Dados em Tempo Real</div>
+            <div class="data-log" id="dataLog">
+                <div class="log-entry">
+                    <span class="timestamp">[00:00:00]</span>
+                    Aguardando dados do simulador...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simulação de dados em tempo real
+        let totalTouches = 0;
+        let totalPasses = 0;
+        let possessionTime = 0;
+        let currentPressure = 0;
+        let isConnected = true;
+
+        function updateStats() {
+            document.getElementById('totalTouches').textContent = totalTouches;
+            document.getElementById('totalPasses').textContent = totalPasses;
+            document.getElementById('possessionTime').textContent = possessionTime.toFixed(1) + 's';
+            document.getElementById('currentPressure').textContent = currentPressure;
+        }
+
+        function addLogEntry(data) {
+            const logContainer = document.getElementById('dataLog');
+            const timestamp = new Date().toLocaleTimeString();
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            entry.innerHTML = `
+                <span class="timestamp">[${timestamp}]</span>
+                Pressão: ${data.pressure_sensor} | Toques: ${data.total_touches} | Passes: ${data.total_passes} | Posse: ${data.possession_time}s
+            `;
+            
+            logContainer.insertBefore(entry, logContainer.firstChild);
+            
+            // Manter apenas os últimos 20 logs
+            while (logContainer.children.length > 20) {
+                logContainer.removeChild(logContainer.lastChild);
+            }
+        }
+
+        function updateConnectionStatus(connected) {
+            const statusDot = document.getElementById('statusDot');
+            const statusText = document.getElementById('statusText');
+            
+            if (connected) {
+                statusDot.className = 'status-dot online';
+                statusText.textContent = 'Conectado ao Simulador';
+            } else {
+                statusDot.className = 'status-dot offline';
+                statusText.textContent = 'Desconectado';
+            }
+        }
+
+        // Simulação de dados para demonstração
+        function simulateData() {
+            // Simula dados similares ao que o simulador Python envia
+            const pressure = Math.random() < 0.3 ? Math.floor(Math.random() * 523) + 500 : Math.floor(Math.random() * 100);
+            
+            if (pressure > 400) {
+                totalTouches++;
+                if (Math.random() < 0.4) {
+                    totalPasses++;
+                }
+                possessionTime += Math.random() * 0.5;
+            }
+            
+            currentPressure = pressure;
+            
+            const data = {
+                id: "chuteira001",
+                type: "SmartShoe",
+                pressure_sensor: pressure,
+                total_touches: totalTouches,
+                total_passes: totalPasses,
+                possession_time: possessionTime.toFixed(2)
+            };
+            
+            updateStats();
+            addLogEntry(data);
+        }
+
+        // Atualizar dados a cada 2 segundos
+        setInterval(simulateData, 2000);
+
+        // Simular mudanças de conexão ocasionalmente
+        setInterval(() => {
+            isConnected = Math.random() > 0.1; // 90% de chance de estar conectado
+            updateConnectionStatus(isConnected);
+        }, 10000);
+
+        // Inicializar
+        updateStats();
+        updateConnectionStatus(true);
+    </script>
+</body>
+</html>
+
