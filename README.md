@@ -6,7 +6,7 @@
 - Samuel Monteiro - 564391
 - Yan Barutti - 566412
 - Guilherme Araujo - 561848
-- Lucas Cortonezi - 563271
+- Lucas Toledo - 563271
 
 ## Descrição do Projeto
 
