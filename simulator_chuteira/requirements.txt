@@ -1,7 +1,3 @@
-paho-mqtt
-
-
-
 Flask
-
-
+requests
+paho-mqtt
