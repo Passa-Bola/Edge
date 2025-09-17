@@ -136,68 +136,133 @@ paho-mqtt==1.6.1
 Antes de iniciar, certifique-se de ter instalado em seu sistema:
 
 1. **Python 3.11 ou superior**
-   - Windows: Baixe de [python.org](https://www.python.org/downloads/)
-   - macOS: `brew install python3` ou baixe de python.org
-   - Linux: `sudo apt-get install python3 python3-pip`
+   - **Windows**: Baixe de [python.org](https://www.python.org/downloads/)
+     - ⚠️ **IMPORTANTE**: Durante a instalação, marque a opção "Add Python to PATH"
+     - **Verificação**: Abra o PowerShell e digite `python --version`
+   - **macOS**: `brew install python3` ou baixe de python.org
+   - **Linux**: `sudo apt-get install python3 python3-pip`
 
 2. **Git**
-   - Windows: Baixe de [git-scm.com](https://git-scm.com/)
-   - macOS: `brew install git` ou use Xcode Command Line Tools
-   - Linux: `sudo apt-get install git`
+   - **Windows**: Baixe de [git-scm.com](https://git-scm.com/)
+   - **macOS**: `brew install git` ou use Xcode Command Line Tools
+   - **Linux**: `sudo apt-get install git`
+   - **Verificação**: No terminal, digite `git --version`
 
-3. **Navegador Web Moderno**
+3. **Editor de Código (Recomendado)**
+   - **VS Code**: [code.visualstudio.com](https://code.visualstudio.com/)
+     - Configure o terminal integrado para usar PowerShell (Windows)
+     - Use Ctrl+Shift+' para abrir terminal integrado
+
+4. **Navegador Web Moderno**
    - Chrome, Firefox, Safari ou Edge
+
+### Configuração Adicional (Windows)
+
+Se você usar PowerShell e encontrar erros de "execução de scripts desabilitada", execute este comando **uma única vez** como administrador:
+
+```powershell
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
 
 ### Passo 1: Clonar o Repositório
 
+Abra o terminal (PowerShell no Windows ou Terminal no macOS/Linux):
+
 ```bash
+# Crie uma pasta para seus projetos (opcional, mas recomendado)
+mkdir projetos
+cd projetos
+
+# Clone o projeto e entre na pasta
 git clone https://github.com/Passa-Bola/Edge.git
 cd Edge
 ```
 
-### Passo 2: Configurar o Ambiente Python
+### Passo 2: Configurar o Ambiente Virtual Python
 
-#### No Windows:
-```cmd
+⚠️ **Esta é a etapa mais crítica**. Preste atenção aos diretórios.
+
+#### 2.1. Navegar para a Pasta do Simulador
+```bash
 cd simulator_chuteira
+```
+
+#### 2.2. Criar e Ativar o Ambiente Virtual
+
+**No Windows (PowerShell):**
+```powershell
+# Criar a venv
 python -m venv venv
-venv\Scripts\activate
-pip install -r requirements.txt
+
+# Ativar a venv
+.\venv\Scripts\Activate.ps1
 ```
 
-#### No macOS/Linux:
+**No macOS/Linux:**
 ```bash
-cd simulator_chuteira
+# Criar a venv
 python3 -m venv venv
+
+# Ativar a venv
 source venv/bin/activate
+```
+
+**Resultado Esperado**: O prompt do terminal deve mostrar `(venv)` no início, indicando que o ambiente virtual está ativo.
+
+#### 2.3. Instalar as Dependências
+
+Com a venv ativa, instale os pacotes necessários:
+
+```bash
 pip install -r requirements.txt
 ```
 
-### Passo 3: Verificar Dependências
-
-Confirme que as seguintes bibliotecas foram instaladas:
+**Se ocorrer erro de ModuleNotFoundError futuramente**, reinstale manualmente:
 ```bash
-pip list | grep -E "(Flask|requests|paho-mqtt)"
+pip install requests flask paho-mqtt
 ```
 
-Você deve ver algo como:
+### Passo 3: Verificar a Instalação
+
+Confirme que as bibliotecas foram instaladas corretamente:
+
+```bash
+pip list
 ```
-Flask                    2.3.3
-requests                 2.31.0
-paho-mqtt               1.6.1
-```
+
+**Você deve ver na lista**:
+- Flask
+- paho-mqtt  
+- requests
+
+Se estes pacotes aparecerem, a configuração está **concluída com sucesso**.
 
 
 ## Instruções de Execução
 
 ### Executando o Sistema Completo
 
-Para testar o sistema completo, você precisará executar dois componentes em terminais separados:
+Para testar o sistema completo, você precisará executar dois componentes em **terminais separados**. Ambos devem estar na pasta `simulator_chuteira` com a venv ativa.
 
 #### Terminal 1: Mock FIWARE IoT Agent
 
+1. Abra um terminal (VS Code: Ctrl+Shift+')
+2. Navegue até a pasta e ative a venv:
+
+**Windows (PowerShell):**
+```powershell
+cd projetos\Edge\simulator_chuteira
+.\venv\Scripts\Activate.ps1
+```
+
+**macOS/Linux:**
 ```bash
-cd simulator_chuteira
+cd projetos/Edge/simulator_chuteira
+source venv/bin/activate
+```
+
+3. Inicie o Mock Agent:
+```bash
 python mock_fiware_iot_agent.py
 ```
 
@@ -209,10 +274,27 @@ python mock_fiware_iot_agent.py
  * Running on http://[seu-ip]:5000
 ```
 
+**⚠️ Deixe este terminal aberto e rodando.**
+
 #### Terminal 2: Simulador da Chuteira
 
+1. Abra um **segundo terminal**
+2. Navegue até a pasta e ative a venv (novamente):
+
+**Windows (PowerShell):**
+```powershell
+cd projetos\Edge\simulator_chuteira
+.\venv\Scripts\Activate.ps1
+```
+
+**macOS/Linux:**
 ```bash
-cd simulator_chuteira
+cd projetos/Edge/simulator_chuteira
+source venv/bin/activate
+```
+
+3. Inicie o simulador:
+```bash
 python simulator.py
 ```
 
@@ -225,11 +307,38 @@ Publicado: {"id": "chuteira001", "type": "SmartShoe", "pressure_sensor": 760, "t
 ...
 ```
 
+**Resultado Esperado**:
+- **Terminal 2**: Mensagens de "Publicado:..." aparecerão a cada 2 segundos
+- **Terminal 1**: Mensagens de "[MOCK FIWARE] Dados recebidos..." aparecerão, confirmando a comunicação
+
 #### Visualizando o Dashboard
 
-1. Abra seu navegador web
-2. Navegue até: `file:///[caminho-completo]/Edge/dashboard/index.html`
-3. Ou simplesmente abra o arquivo `dashboard/index.html` diretamente no navegador
+1. Abra seu navegador (Chrome, Firefox, etc.)
+2. **Opção 1 - Abrir arquivo diretamente**: 
+   - Pressione `Ctrl+O` no navegador
+   - Navegue até a pasta do projeto e abra: `[caminho]/Edge/dashboard/index.html`
+   - **Windows**: `C:\projetos\Edge\dashboard\index.html`
+3. **Opção 2 - URL direta**: Digite no navegador: `file:///[caminho-completo]/Edge/dashboard/index.html`
+
+**Resultado Esperado**:
+- O título "🦶 Chuteira Inteligente" aparece
+- O status mostra "Conectado ao Simulador" com um ponto verde
+- Os cards ("Toques na Bola", "Passes", etc.) atualizam seus valores automaticamente
+
+### Verificação Final de Sucesso
+
+✅ **Checklist**:
+- [ ] Terminal 1 (Mock) está recebendo dados
+- [ ] Terminal 2 (Simulador) está enviando dados
+- [ ] Dashboard no navegador mostra status "Conectado" e números mudando
+
+Se tudo isso estiver funcionando, **o projeto está 100% operacional!**
+
+### Parando a Execução
+
+- **Para parar qualquer componente**: Pressione `Ctrl+C` no terminal correspondente
+- **Para desativar a venv**: Digite `deactivate` em cada terminal
+- **Para parar todos**: Feche todos os terminais
 
 ### Testando Componentes Individualmente
 
@@ -266,16 +375,39 @@ python simulator.py
 
 ### Problemas Comuns e Soluções
 
-#### 1. Erro: "ModuleNotFoundError: No module named 'flask'"
+#### 1. Erro: "Execução de scripts desabilitada" (Windows PowerShell)
 
-**Problema**: Dependências não instaladas corretamente.
+**Problema**: `.\venv\Scripts\Activate.ps1 cannot be loaded because running scripts is disabled on this system`
 
-**Solução**:
+**Solução**: Execute este comando **uma única vez** como administrador no PowerShell:
+```powershell
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
+Depois tente ativar a venv novamente.
+
+#### 2. Erro: "ModuleNotFoundError: No module named 'flask'"
+
+**Problema**: Dependências não instaladas corretamente ou venv não ativa.
+
+**Soluções**:
+1. **Verificar se a venv está ativa**: O prompt deve mostrar `(venv)`
+2. **Reinstalar dependências**:
 ```bash
 pip install -r requirements.txt
+# OU manualmente:
+pip install requests flask paho-mqtt
 ```
 
-#### 2. Erro: "Address already in use" (Porta 5000 ocupada)
+#### 3. Erro: "Python não é reconhecido como comando" (Windows)
+
+**Problema**: Python não foi adicionado ao PATH durante a instalação.
+
+**Soluções**:
+1. **Reinstalar Python**: Baixe novamente e marque "Add Python to PATH"
+2. **Usar py command**: Substitua `python` por `py` nos comandos
+3. **Adicionar ao PATH manualmente**: Procurar por "Variáveis de Ambiente" no Windows
+
+#### 4. Erro: "Address already in use" (Porta 5000 ocupada)
 
 **Problema**: Outro processo está usando a porta 5000.
 
@@ -291,7 +423,7 @@ netstat -ano | findstr :5000  # Windows
 # E também atualize o simulator.py: MOCK_FIWARE_URL = "http://localhost:5001/iot/json"
 ```
 
-#### 3. Erro de Conexão no Simulador
+#### 5. Erro de Conexão no Simulador
 
 **Problema**: "Erro de conexão: Certifique-se de que o Mock FIWARE IoT Agent está rodando"
 
@@ -300,7 +432,7 @@ netstat -ano | findstr :5000  # Windows
 2. Confirme que não há erros na inicialização do Mock Agent
 3. Teste o endpoint manualmente com curl
 
-#### 4. Dashboard não carrega ou não exibe dados
+#### 6. Dashboard não carrega ou não exibe dados
 
 **Problema**: Arquivo HTML não abre ou dados não aparecem.
 
@@ -309,7 +441,7 @@ netstat -ano | findstr :5000  # Windows
 2. **Para dados simulados**: O dashboard usa dados simulados próprios, independente do simulador Python
 3. **Para integração real**: Seria necessário modificar o JavaScript para consumir dados do Mock Agent
 
-#### 5. Permissões negadas (Linux/macOS)
+#### 7. Permissões negadas (Linux/macOS)
 
 **Problema**: Erro de permissão ao executar scripts.
 
